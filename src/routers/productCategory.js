@@ -22,7 +22,7 @@ router.get("/productCategories/:id", async (req, res) => {
   }
 });
 
-router.post("/productCategories", auth, async (req, res) => {
+router.post("/productCategories", async (req, res) => {
   const category = new Category({
     ...req.body,
   });
