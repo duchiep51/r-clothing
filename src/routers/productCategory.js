@@ -6,7 +6,6 @@ const auth = require("../middlewares/auth");
 router.get("/productCategories", async (req, res) => {
   try {
     const categories = await Category.find({});
-    console.log(categories);
     res.send(categories);
   } catch (e) {
     res.status(500).send(e.message);
