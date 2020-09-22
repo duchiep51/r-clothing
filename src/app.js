@@ -15,14 +15,16 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
-app.use((req, res) =>
+app.get("/*", (req, res, next) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Expose-Headers": "Content-Range",
     "Content-Range": "1-2*",
     "X-Total-Count": "30",
-  })
-);
+  });
+  next();
+});
+
 app.get("/customers", (req, res) => {
   console.log("request");
   res.status(200).send("customer");
