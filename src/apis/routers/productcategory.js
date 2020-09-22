@@ -6,6 +6,12 @@ const auth = require("../../middlewares/auth");
 router.get("/productCategories", async (req, res) => {
   try {
     const categories = await Category.find({});
+    res.set({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Expose-Headers": "Content-Range",
+      "Content-Range": "1-2*",
+      "X-Total-Count": "30",
+    });
     res.send(categories);
   } catch (e) {
     res.status(500).send(e.message);
