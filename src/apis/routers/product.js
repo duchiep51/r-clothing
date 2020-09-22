@@ -7,10 +7,11 @@ const auth = require("../../middlewares/auth");
 
 router.get("/products", async (req, res) => {
   try {
-    const products = Product.find({});
+    const products = await Product.find({}).populate("productDetails");
+
     res.send(products);
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send(e.message);
   }
 });
 
