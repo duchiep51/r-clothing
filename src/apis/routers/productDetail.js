@@ -4,7 +4,7 @@ const ProductDetail = require("../models/productDetail");
 const auth = require("../../middlewares/auth");
 const controller = require("../controllers/productDetail");
 
-router.get("/productDetails", async (req, res) => {
+router.get("/product-details", async (req, res) => {
   try {
     const productDetails = ProductDetail.find({});
     res.send(productDetails);
@@ -13,10 +13,13 @@ router.get("/productDetails", async (req, res) => {
   }
 });
 
-router.get("/productDetails/:productID", controller.getAllProductDetails);
+router.get(
+  "/product-details/:productID",
+  controller.getAllProductDetailsByProductID
+);
 
-router.get("/productDetails/:id", controller.getProductDetailByID);
+router.get("/product-details/:id", controller.getProductDetailByID);
 
-router.post("/productDetails", controller.editProductDetail);
+router.post("/product-details", controller.editProductDetail);
 
 module.exports = router;
