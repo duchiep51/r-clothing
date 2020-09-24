@@ -2,6 +2,7 @@ const ProductDetail = require("../models/productDetail");
 const auth = require("../../middlewares/auth");
 
 module.exports.getAllProductDetailsByProductID = async function (req, res) {
+  console.log(req.params.productID);
   try {
     const productDetails = await ProductDetail.find({
       productID: req.params.productID,

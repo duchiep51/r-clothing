@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middlewares/auth");
-const userController = require("../controllers/product");
+const productController = require("../controllers/product");
 const Product = require("../models/product");
 
-router.get("/products", userController.getAllUser);
+router.get("/", productController.getAllProduct);
 
 // test route
 router.get("/unpopulatedProducts", async (req, res) => {
@@ -17,12 +17,12 @@ router.get("/unpopulatedProducts", async (req, res) => {
   }
 });
 
-router.get("/products/:id", userController.getUserById);
+router.get("/:id", productController.getProductById);
 
-router.post("/products", userController.createProduct);
+router.post("/create-product", productController.createProduct);
 
-router.patch("/products/:id", userController.editProduct);
+router.patch("/:id", productController.editProduct);
 
-router.delete("/product/:id", userController.deleteProduct);
+router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const auth = require("../../middlewares/auth");
 const Product = require("../models/product");
 
-module.exports.getAllUser = async function (req, res) {
+module.exports.getAllProduct = async function (req, res) {
   try {
     const products = await Product.find({}).populate("productDetails").lean();
 
@@ -11,7 +11,7 @@ module.exports.getAllUser = async function (req, res) {
   }
 };
 
-module.exports.getUserById = async function (req, res) {
+module.exports.getProductById = async function (req, res) {
   try {
     const product = await Product.findById(req.params.id);
     await product.populate("productDetails").execPopulate();
