@@ -1,5 +1,6 @@
 const auth = require("../../middlewares/auth");
 const Product = require("../models/product");
+const ProductDetail = require("../models/productDetail");
 
 module.exports.getAllProduct = async function (req, res) {
   try {
@@ -45,7 +46,7 @@ module.exports.createProduct = async (req, res) => {
     details.forEach(async (detail) => {
       const productDetail = new ProductDetail({
         ...detail,
-        productID: product._id,
+        productID: product.id,
       });
       await productDetail.save();
     });

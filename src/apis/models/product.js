@@ -1,66 +1,15 @@
-const { Timestamp } = require("mongodb");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator = require("validator");
 
-//************************* schema v0.1
-
-// const schema = new Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//     trim: true,
-//   },
-//   categoryID: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     required: true,
-//     ref: "productCategory",
-//   },
-//   size: {
-//     type: [String],
-//     require: true,
-//   },
-//   quantity: {
-//     type: Number,
-//     required: true,
-//   },
-//   price: {
-//     type: Number,
-//     required: true,
-//   },
-//   description: {
-//     type: String,
-//     trim: true,
-//   },
-//   details: {
-//     type: String,
-//     required: true,
-//   },
-//   discount: {
-//     type: Number,
-//     default: 1,
-//   },
-//   createdDate: {
-//     type: Date,
-//     default: Date.now,
-//   },
-//   photoURL: {
-//     type: String,
-//   },
-//   averageRating: {
-//     type: Number,
-//     default: 0,
-//   },
-//   isDeleted: {
-//     type: Boolean,
-//     default: false,
-//   },
-// });
-
-// ********************* schema v0.2
+let id = mongoose.Types.ObjectId();
 
 const schema = new Schema(
   {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: id,
+    },
     name: {
       type: String,
       required: true,
@@ -97,7 +46,7 @@ const schema = new Schema(
 
 schema.virtual("productDetails", {
   ref: "productDetail",
-  localField: "_id",
+  localField: "id",
   foreignField: "productID",
 });
 

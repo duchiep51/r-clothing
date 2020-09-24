@@ -75,7 +75,7 @@ schema.methods.toJSON = function () {
 // generate jwt
 schema.methods.generateJWT = async function () {
   const member = this;
-  const token = jwt.sign({ _id: member._id.toString() }, "thuongthuong");
+  const token = jwt.sign({ id: member.id.toString() }, "thuongthuong");
 
   member.tokens = member.tokens.concat({ token });
   await member.save();
