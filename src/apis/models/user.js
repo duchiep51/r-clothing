@@ -63,8 +63,8 @@ const schema = new Schema({
 });
 
 schema.methods.toJSON = function () {
-  const member = this;
-  const memberObject = member.toObject();
+  const user = this;
+  const memberObject = user.toObject();
 
   delete memberObject.password;
   delete memberObject.tokens;
@@ -74,38 +74,38 @@ schema.methods.toJSON = function () {
 
 // generate jwt
 schema.methods.generateJWT = async function () {
-  const member = this;
-  const token = jwt.sign({ id: member.id.toString() }, "thuongthuong");
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, "thuongthuong");
 
-  member.tokens = member.tokens.concat({ token });
-  await member.save();
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
 
   return token;
 };
 
 // check login
 schema.statics.findByCredentials = async (email, password) => {
-  const member = await Member.findOne({ email });
+  const user = await Member.findOne({ email });
 
-  if (!member) {
+  if (!user) {
     throw new Error("Unable to login!");
   }
 
-  const isMatch = await bcrypt.compare(password, member.password);
+  const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
     throw new Error("Unable to login");
   }
 
-  return member;
+  return user;
 };
 
 // hash the password before saving
 schema.pre("save", async function (next) {
-  const member = this;
+  const user = this;
 
-  if (member.isModified("password")) {
-    member.password = await bcrypt.hash(member.password, 8);
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 8);
   }
 
   next();

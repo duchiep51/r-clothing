@@ -46,7 +46,7 @@ module.exports.createProduct = async (req, res) => {
     details.forEach(async (detail) => {
       const productDetail = new ProductDetail({
         ...detail,
-        productID: product.id,
+        productID: product._id,
       });
       await productDetail.save();
     });

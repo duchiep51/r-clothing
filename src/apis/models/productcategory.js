@@ -2,13 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator = require("validator");
 
-let id = mongoose.Types.ObjectId();
-
 const schema = new Schema({
-  id: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: id,
-  },
   name: {
     type: String,
     require: true,
@@ -21,7 +15,7 @@ const schema = new Schema({
 
 schema.virtual("products", {
   ref: "product",
-  localField: "id",
+  localField: "_id",
   foreignField: "categoryID",
 });
 
