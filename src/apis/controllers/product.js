@@ -3,8 +3,18 @@ const Product = require("../models/product");
 const ProductDetail = require("../models/productDetail");
 
 module.exports.getAllProduct = async function (req, res) {
+  console.log(Object.keys(req.query));
+
   try {
-    const products = await Product.find({}).populate("productDetails").lean();
+    const filter = {};
+
+    if (Object.keys(req.query).length != 0) {
+      filter = req.query;
+    }
+
+    const products = await Product.find(filter)
+      .populate("productDetails")
+      .lean();
 
     res.send(products);
   } catch (e) {

@@ -85,7 +85,7 @@ schema.methods.generateJWT = async function () {
 
 // check login
 schema.statics.findByCredentials = async (email, password) => {
-  const user = await Member.findOne({ email });
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw new Error("Unable to login!");
@@ -111,6 +111,6 @@ schema.pre("save", async function (next) {
   next();
 });
 
-const Member = mongoose.model("Member", schema);
+const User = mongoose.model("User", schema);
 
-module.exports = Member;
+module.exports = User;

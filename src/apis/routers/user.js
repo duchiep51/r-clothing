@@ -5,16 +5,16 @@ const controller = require("../controllers/user");
 
 router.get("/me", auth, controller.getProfile);
 
-router.post("/login", controller.login);
+router.post("/sign-in", controller.signIn);
 
-router.post("/logout", auth, controller.logout);
+router.post("/sign-out", auth, controller.signOut);
 
-router.post("/logout-all", auth);
+router.post("/logout-all", auth, controller.signOutAll);
 
-router.post("/members", controller.logoutAll);
+router.post("/sign-up", controller.signUp);
 
-router.patch("/me", auth, controller.editProfile);
+router.patch("/update", auth, controller.editProfile);
 
-router.delete("/me", auth, controller.deleteProfile);
+router.delete("/delete", auth, controller.deleteProfile);
 
 module.exports = router;

@@ -5,37 +5,49 @@ module.exports.getProfile = async (req, res) => {
   res.send(req.user);
 };
 
-module.exports.login = async (req, res) => {
+module.exports.signUp = async (req, res) => {
   try {
-    const member = await Member.findByCredentials(
+    const user = await User.create({ ...req.body });
+
+    const token = await user.generateJWT();
+
+    res.send({ user, token });
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+};
+
+module.exports.signIn = async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
 
-    const token = await member.generateJWT();
-    res.send({ member, token });
+    const token = await user.generateJWT();
+    res.send({ user, token });
   } catch (e) {
     res.status(404).send({ e: e.message });
   }
 };
 
-module.exports.logout = async (req, res) => {
+module.exports.signOut = async (req, res) => {
   try {
-    req.member.tokens = req.member.tokens.filter((item) => {
+    req.user.tokens = req.user.tokens.filter((item) => {
       return item.token !== req.token;
     });
 
-    await req.member.save();
+    await req.user.save();
     res.send();
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
 };
 
-module.exports.logoutAll = async (req, res) => {
+module.exports.signOutAll = async (req, res) => {
   try {
-    req.member.tokens = [];
-    await req.member.save();
+    req.user.tokens = [];
+    await req.user.save();
     res.send();
   } catch (e) {
     res.status(500).send();
@@ -46,12 +58,12 @@ module.exports.editProfile = async (req, res) => {
   const properties = Object.keys(req.body);
 
   try {
-    const member = req.member;
+    const user = req.user;
 
-    properties.forEach((prop) => (member[prop] = req.body[prop]));
+    properties.forEach((prop) => (user[prop] = req.body[prop]));
 
-    member.save();
-    res.send(member);
+    user.save();
+    res.send(user);
   } catch (e) {
     res.status(404).send(e);
   }
@@ -59,8 +71,13 @@ module.exports.editProfile = async (req, res) => {
 
 module.exports.deleteProfile = async (req, res) => {
   try {
-    req.member.remove();
-    res.send(req.member);
+    const user = await User.findById(req.user._id);
+
+    user.isDeleted = true;
+
+    await user.save();
+
+    res.send(user);
   } catch (e) {
     res.status(500).send({ e: e.message });
   }
