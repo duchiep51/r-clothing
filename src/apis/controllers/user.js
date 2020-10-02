@@ -14,7 +14,7 @@ module.exports.signUp = async (req, res) => {
 
     res.send({ user, token });
   } catch (e) {
-    res.status(401).send(Error(e));
+    res.status(400).send(Error(e));
   }
 };
 
@@ -28,7 +28,7 @@ module.exports.signIn = async (req, res) => {
     const token = await user.generateJWT();
     res.send({ user, token });
   } catch (e) {
-    res.status(404).send(Error(e));
+    res.status(401).send(Error(e));
   }
 };
 
