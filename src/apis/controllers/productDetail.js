@@ -1,5 +1,6 @@
 const ProductDetail = require("../models/productDetail");
 const auth = require("../../middlewares/auth");
+const Error = require("../utils/error");
 
 module.exports.getAllProductDetailsByProductID = async function (req, res) {
   console.log(req.params.productID);
@@ -9,7 +10,7 @@ module.exports.getAllProductDetailsByProductID = async function (req, res) {
     });
     res.send(productDetails);
   } catch (e) {
-    res.status(500).send(e.message);
+    res.status(500).send(Error(e));
   }
 };
 
@@ -24,7 +25,7 @@ module.exports.getProductDetailByID = async function (req, res) {
 
     res.send(productDetail);
   } catch (e) {
-    res.status(500).send(e.message);
+    res.status(500).send(Error(e));
   }
 };
 
@@ -35,6 +36,6 @@ module.exports.editProductDetail = async (req, res) => {
     await productDetail.save();
     res.status(201).send(productDetail);
   } catch (e) {
-    res.status(400).send(e.message);
+    res.status(400).send(Error(e));
   }
 };

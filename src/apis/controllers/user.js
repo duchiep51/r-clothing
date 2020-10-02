@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const auth = require("../../middlewares/auth");
+const Error = require("../utils/error");
 
 module.exports.getProfile = async (req, res) => {
   res.send(req.user);
@@ -13,7 +14,7 @@ module.exports.signUp = async (req, res) => {
 
     res.send({ user, token });
   } catch (e) {
-    res.status(400).send(e.message);
+    res.status(401).send(Error(e));
   }
 };
 
@@ -27,7 +28,7 @@ module.exports.signIn = async (req, res) => {
     const token = await user.generateJWT();
     res.send({ user, token });
   } catch (e) {
-    res.status(404).send({ e: e.message });
+    res.status(404).send(Error(e));
   }
 };
 
@@ -40,7 +41,7 @@ module.exports.signOut = async (req, res) => {
     await req.user.save();
     res.send();
   } catch (e) {
-    res.status(500).send({ message: e.message });
+    res.status(500).send(Error(e));
   }
 };
 
@@ -65,7 +66,7 @@ module.exports.editProfile = async (req, res) => {
     user.save();
     res.send(user);
   } catch (e) {
-    res.status(404).send(e);
+    res.status(404).send(Error(e));
   }
 };
 
@@ -79,6 +80,6 @@ module.exports.deleteProfile = async (req, res) => {
 
     res.send(user);
   } catch (e) {
-    res.status(500).send({ e: e.message });
+    res.status(500).send(Error(e));
   }
 };

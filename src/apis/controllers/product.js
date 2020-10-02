@@ -1,24 +1,35 @@
 const auth = require("../../middlewares/auth");
 const Product = require("../models/product");
+const Error = require("../utils/error");
 const ProductDetail = require("../models/productDetail");
 
 module.exports.getAllProduct = async function (req, res) {
-  console.log(Object.keys(req.query));
-
   try {
-    const filter = {};
+    let filter = {};
 
-    if (Object.keys(req.query).length != 0) {
-      filter = req.query;
+    const query = req.query;
+
+    for (const property in query) {
+      if (property !== "limit" && property !== "skip") {
+        filter[property] = query.property;
+      }
     }
 
-    const products = await Product.find(filter)
+    if (filter.name) {
+      const regex = new RegExp(filter.name, "i");
+      filter.name = regex;
+    }
+
+    const products = await Product.find(filter, null, {
+      limit: parseInt(query.limit),
+      skip: parseInt(query.skip),
+    })
       .populate("productDetails")
       .lean();
 
     res.send(products);
   } catch (e) {
-    res.status(500).send(e.message);
+    res.status(500).send(Error(e));
   }
 };
 
@@ -33,7 +44,7 @@ module.exports.getProductById = async function (req, res) {
 
     res.send({ product, productDetails: product.productDetails });
   } catch (e) {
-    res.status(500).send(e.message);
+    res.status(500).send(Error(e));
   }
 };
 
@@ -62,7 +73,7 @@ module.exports.createProduct = async (req, res) => {
     });
     res.send(product);
   } catch (e) {
-    res.status(500).send(e.message);
+    res.status(500).send(Error(e));
   }
 };
 
@@ -81,7 +92,7 @@ module.exports.editProduct = async (req, res) => {
 
     res.send(product);
   } catch (e) {
-    res.status(404).send(e);
+    res.status(404).send(Error(e));
   }
 };
 
@@ -95,6 +106,6 @@ module.exports.deleteProduct = async (req, res) => {
 
     res.send(product).send();
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send(Error(e));
   }
 };
