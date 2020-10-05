@@ -8,17 +8,25 @@ module.exports.getProfile = async (req, res) => {
 
 module.exports.signUp = async (req, res) => {
   try {
-    const user = await User.create({ ...req.body });
+    const user = new User({ ...req.body });
+
+    await user.save();
 
     const token = await user.generateJWT();
 
     res.status(201).send({ user, token });
   } catch (e) {
-    res.status(400).send({
-      error: {
-        message: "Server has been shut down! Try again later!",
-      },
-    });
+    let status = 400;
+    let error = e;
+
+    if (e.name === "MongoError" && e.code === 11000) {
+      status = 409;
+      error = {
+        message: "User already exist!",
+      };
+    }
+
+    res.status(status).send(Error(error));
   }
 };
 
