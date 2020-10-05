@@ -64,12 +64,12 @@ const schema = new Schema({
 
 schema.methods.toJSON = function () {
   const user = this;
-  const memberObject = user.toObject();
+  const userObject = user.toObject();
 
-  delete memberObject.password;
-  delete memberObject.tokens;
+  delete userObject.password;
+  delete userObject.tokens;
 
-  return memberObject;
+  return userObject;
 };
 
 // generate jwt

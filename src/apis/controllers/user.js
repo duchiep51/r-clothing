@@ -12,9 +12,13 @@ module.exports.signUp = async (req, res) => {
 
     const token = await user.generateJWT();
 
-    res.send({ user, token });
+    res.status(201).send({ user, token });
   } catch (e) {
-    res.status(400).send(Error(e));
+    res.status(400).send({
+      error: {
+        message: "Server has been shut down! Try again later!",
+      },
+    });
   }
 };
 

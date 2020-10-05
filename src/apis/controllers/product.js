@@ -10,8 +10,13 @@ module.exports.getAllProduct = async function (req, res) {
     const query = req.query;
 
     for (const property in query) {
-      if (property !== "limit" && property !== "skip") {
-        filter[property] = query.property;
+      if (
+        property !== "limit" &&
+        property !== "skip" &&
+        property !== "$lte" &&
+        property !== "$gte"
+      ) {
+        filter[property] = query[property];
       }
     }
 
@@ -20,7 +25,21 @@ module.exports.getAllProduct = async function (req, res) {
       filter.name = regex;
     }
 
-    const products = await Product.find(filter, null, {
+    if (query.$lte || query.$gte) {
+      filter.averageRating = {};
+
+      if (query.$lte) {
+        filter.averageRating.$lte = query.$lte;
+      }
+
+      if (query.$gte) {
+        filter.averageRating.$gte = query.$gte;
+      }
+    }
+
+    console.log(filter);
+
+    const products = await Product.find(filter, "averageRating", {
       limit: parseInt(query.limit),
       skip: parseInt(query.skip),
     })
