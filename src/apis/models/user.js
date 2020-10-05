@@ -5,11 +5,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const schema = new Schema({
-  userName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   password: {
     type: String,
     minlength: 6,
